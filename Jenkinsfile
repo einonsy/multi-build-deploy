@@ -10,6 +10,7 @@ pipeline {
       }
       stage('smoke test deploy') {
          steps {
+            sh 'kubectl create namespace test'
             sh 'kubectl apply -f deployment.yaml -n test'
          }
       }
