@@ -8,5 +8,10 @@ pipeline {
             sh 'kubectl get deployments,pods,svc'
          }
       }
+      stage('smoke test deploy') {
+         steps {
+            sh 'kubectl apply -f deployment.yaml -n test'
+         }
+      }
    }
 }
