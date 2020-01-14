@@ -14,7 +14,7 @@ pipeline {
 
       stage('Build Images') {
          steps {
-            sh "docker build -t einonsy/podinfo:${env.BUILD_NUMBER} --file app01/dockerfile"
+            sh "docker build -t einonsy/podinfo:${env.BUILD_NUMBER} --file app01/."
          }
       }
 
