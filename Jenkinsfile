@@ -14,6 +14,19 @@ pipeline {
 
       stage('Build Images') {
          steps {
+            script {
+               for dockerfile in docker/Dockerfile.*; do
+                  project=${dockerfile##*\.}
+                  docker build -t docker.${project}:${BRANCH_NAME}-latest -f ${dockerfile} .
+
+    returnStatus=$?
+    if [ $returnStatus -ne 0 ]; then
+      exit $returnStatus
+    fi
+done
+unset project
+unset dockerfile
+            }
             sh "docker build -t einonsy/podinfo:${env.BUILD_NUMBER} --file app01/."
          }
       }
