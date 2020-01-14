@@ -5,7 +5,7 @@ pipeline {
          steps {
             sh 'kubectl version'
             sh 'kubectl get deployments,pods,svc'
-            sh 'pwd'
+            sh 'ls -als'
          }
       }
 
