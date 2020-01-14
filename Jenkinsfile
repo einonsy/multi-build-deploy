@@ -5,6 +5,7 @@ pipeline {
          steps {
             sh 'kubectl version'
             sh 'kubectl get deployments,pods,svc'
+            sh 'pwd'
          }
       }
 
@@ -13,7 +14,7 @@ pipeline {
 
       stage('Build Images') {
          steps {
-            sh "docker build -t einonsy/podinfo:${env.BUILD_NUMBER} ."
+            sh "docker build -t einonsy/podinfo:${env.BUILD_NUMBER} -f app01/dockerfile"
          }
       }
 
