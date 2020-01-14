@@ -1,6 +1,5 @@
 pipeline {
    agent any
-
    stages {
       stage('Environment review') {
          steps {
@@ -8,11 +7,24 @@ pipeline {
             sh 'kubectl get deployments,pods,svc'
          }
       }
-      stage('smoke test deploy') {
+
+   // TODO Unit Test
+
+
+      stage('Build Images') {
          steps {
-            sh 'kubectl create namespace test'
-            sh 'kubectl apply -f deployment.yaml -n test'
+            sh "docker build -t einonsy/apache2:${env.BUILD_NUMBER} ."
          }
       }
+
+      stage('push images') {
+         steps {
+            withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+            sh "docker login -u ${env.dockerHubUSER} -p ${env.dockerHubPassword}"
+            sh "docker push einonsy/apache2:${env.BUILD_NUMBER}"
+         }
+            }
+      }
+      
    }
 }
