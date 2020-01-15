@@ -12,13 +12,13 @@ pipeline {
 
    stages {
       stage('Environment review') { steps { script{
-      COMMITTER_EMAIL = sh 'git log -1 --pretty=format:"%an"'
+      env.COMMITTER_EMAIL = sh 'git log -1 --pretty=format:"%an"'
       
          
             sh 'kubectl version'
             sh 'kubectl get deployments,pods,svc'
             sh 'ls -als'
-            echo "COMMITTER_EMAIL: ${COMMITTER_EMAIL}"
+            echo "COMMITTER_EMAIL: ${env.COMMITTER_EMAIL}"
          }
       }
       }
