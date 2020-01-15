@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: podinfo-deployment
+  namespace: epaas-test-b-23
   labels:
     app: podinfo
 spec:
