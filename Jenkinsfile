@@ -11,13 +11,10 @@ pipeline {
    }
 
    stages {
-      stage('Environment review') {
-      script{
+      stage('Environment review') { steps { script{
       COMMITTER_EMAIL = sh (script: "git --no-pager show -s --format='%%ae'", returnStdout: true).split('\r\n')[2].trim()
       
-       
-
-         steps {
+         
             sh 'kubectl version'
             sh 'kubectl get deployments,pods,svc'
             sh 'ls -als'
