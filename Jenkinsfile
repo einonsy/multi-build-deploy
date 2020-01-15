@@ -7,7 +7,7 @@ pipeline {
       // Cypress requires `$HOME` to be an absolute path, so we reference the WORKSPACE variable
       HOME = "${env.WORKSPACE}"
       RELEASE_TAG = "${env.BRANCH_NAME}-r${BUILD_NUMBER}"
-      nameSpace = "b-${BUILD_NUMBER}"
+      nameSpace = "epaas-test-b-${BUILD_NUMBER}"
    }
 
    stages {
@@ -45,7 +45,7 @@ pipeline {
       
       stage('Deploy') {
          steps {
-            sh "kubectl create namespace ePaaS-Test-${nameSpace}"
+            sh "kubectl create namespace ${nameSpace}"
             sh 'cat deployment.yaml | sed "s/{{BUILD_NUMBER}}/$BUILD_NUMBER/g" | kubectl apply -f -'
             sh 'kubectl apply -f service.yaml'
             
