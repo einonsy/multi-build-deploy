@@ -8,25 +8,20 @@ pipeline {
             sh 'ls -als'
          }
       }
+environment {
+    JUNIT = 'true'
+    // Yarn needs to write to the HOME directory, without this it will attempt to write to /root
+    // Cypress requires `$HOME` to be an absolute path, so we reference the WORKSPACE variable
+    HOME = "${env.WORKSPACE}"
+    RELEASE_TAG = "${env.BRANCH_NAME}-r${BUILD_NUMBER}"
+    nameSpace = "-r${BUILD_NUMBER}"
+  }
 
    // TODO Unit Test
 
 
       stage('Build Images') {
          steps {
-            script {
-               for dockerfile in docker/Dockerfile.*; do
-                  project=${dockerfile##*\.}
-                  docker build -t docker.${project}:${BRANCH_NAME}-latest -f ${dockerfile} .
-
-    returnStatus=$?
-    if [ $returnStatus -ne 0 ]; then
-      exit $returnStatus
-    fi
-done
-unset project
-unset dockerfile
-            }
             sh "docker build -t einonsy/podinfo:${env.BUILD_NUMBER} --file app01/."
          }
       }
@@ -45,9 +40,9 @@ unset dockerfile
          }
       }
       
-      stage('Apply Kubernetes Files') {
+      stage('Deploy') {
          steps {
-            
+            sh "kubectl create namespace ePaaS-Test-${nameSpace}"
             sh 'cat deployment.yaml | sed "s/{{BUILD_NUMBER}}/$BUILD_NUMBER/g" | kubectl apply -f -'
             sh 'kubectl apply -f service.yaml'
             
