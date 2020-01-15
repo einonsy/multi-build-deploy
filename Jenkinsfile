@@ -2,14 +2,14 @@ pipeline {
    agent any
 
    environment {
+      script {
       JUNIT = 'true'
       // Yarn needs to write to the HOME directory, without this it will attempt to write to /root
       // Cypress requires `$HOME` to be an absolute path, so we reference the WORKSPACE variable
       HOME = "${env.WORKSPACE}"
       RELEASE_TAG = "${env.BRANCH_NAME}-r${BUILD_NUMBER}"
       nameSpace = "epaas-test-b-${BUILD_NUMBER}"
-      script {
-         env.AUTHOR = sh (script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
+      env.AUTHOR = sh (script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
       }
    }
 
