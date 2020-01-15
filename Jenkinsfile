@@ -14,7 +14,7 @@ pipeline {
       stage('Environment review') {
       script{
       COMMITTER_EMAIL = sh (script: "git --no-pager show -s --format='%%ae'", returnStdout: true).split('\r\n')[2].trim()
-      }
+      
        
 
          steps {
@@ -23,6 +23,7 @@ pipeline {
             sh 'ls -als'
             echo "COMMITTER_EMAIL: ${COMMITTER_EMAIL}"
          }
+      }
       }
 
 
@@ -57,6 +58,7 @@ pipeline {
             
          }
       }
+
 
    }
 }
