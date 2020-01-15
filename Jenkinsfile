@@ -8,18 +8,18 @@ pipeline {
       HOME = "${env.WORKSPACE}"
       RELEASE_TAG = "${env.BRANCH_NAME}-r${BUILD_NUMBER}"
       nameSpace = "epaas-test-b-${BUILD_NUMBER}"
+      script {
+         env.AUTHOR = sh (script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
+      }
    }
 
    stages {
-      stage('Environment review') { steps { script {
-      env.AUTHOR = sh (script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
-      
-         
+      stage('Environment review') { steps { 
             sh 'kubectl version'
             sh 'kubectl get deployments,pods,svc'
             sh 'ls -als'
             echo "COMMITTER_EMAIL: ${env.AUTHOR}"
-         }
+         
       }
       }
 
