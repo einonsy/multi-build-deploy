@@ -18,7 +18,7 @@ pipeline {
             sh 'kubectl version'
             sh 'kubectl get deployments,pods,svc'
             sh 'ls -als'
-            echo "COMMITTER_EMAIL: ${env.COMMITTER_EMAIL}"
+            echo "COMMITTER_EMAIL: ${env.AUTHOR}"
          }
       }
       }
@@ -38,7 +38,7 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
             sh "docker login -u ${env.dockerHubUSER} -p ${env.dockerHubPassword}"
             sh "docker push einonsy/podinfo:${env.BUILD_NUMBER}"
-            echo "COMMITTER_EMAIL: ${env.COMMITTER_EMAIL}"
+            echo "COMMITTER_EMAIL: ${env.AUTHOR}"
          }
             }
       }
