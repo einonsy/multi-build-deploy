@@ -12,7 +12,7 @@ pipeline {
 
    stages {
       stage('Environment review') { steps { script{
-      COMMITTER_EMAIL = sh (script: "git --no-pager show -s --format='%%ae'", returnStdout: true).split('\r\n')[2].trim()
+      COMMITTER_EMAIL = sh 'git log --pretty=format:"%h - %an, %ar : %s"'
       
          
             sh 'kubectl version'
