@@ -1,5 +1,15 @@
 pipeline {
    agent any
+
+   environment {
+      JUNIT = 'true'
+      // Yarn needs to write to the HOME directory, without this it will attempt to write to /root
+      // Cypress requires `$HOME` to be an absolute path, so we reference the WORKSPACE variable
+      HOME = "${env.WORKSPACE}"
+      RELEASE_TAG = "${env.BRANCH_NAME}-r${BUILD_NUMBER}"
+      nameSpace = "-r${BUILD_NUMBER}"
+   }
+
    stages {
       stage('Environment review') {
          steps {
@@ -8,14 +18,7 @@ pipeline {
             sh 'ls -als'
          }
       }
-environment {
-    JUNIT = 'true'
-    // Yarn needs to write to the HOME directory, without this it will attempt to write to /root
-    // Cypress requires `$HOME` to be an absolute path, so we reference the WORKSPACE variable
-    HOME = "${env.WORKSPACE}"
-    RELEASE_TAG = "${env.BRANCH_NAME}-r${BUILD_NUMBER}"
-    nameSpace = "-r${BUILD_NUMBER}"
-  }
+
 
    // TODO Unit Test
 
