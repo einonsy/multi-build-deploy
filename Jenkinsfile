@@ -12,7 +12,7 @@ pipeline {
 
    stages {
       stage('Environment review') { steps { script {
-      env.COMMITTER_EMAIL = sh (script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
+      env.AUTHOR = sh (script: "git log -1 --pretty=format:'%an'", returnStdout: true).trim()
       
          
             sh 'kubectl version'
@@ -38,6 +38,7 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
             sh "docker login -u ${env.dockerHubUSER} -p ${env.dockerHubPassword}"
             sh "docker push einonsy/podinfo:${env.BUILD_NUMBER}"
+            echo "COMMITTER_EMAIL: ${env.COMMITTER_EMAIL}"
          }
             }
       }
