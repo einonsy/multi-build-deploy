@@ -46,7 +46,7 @@ pipeline {
       stage('Deploy') {
          steps {
             sh "kubectl create namespace ${nameSpace}"
-            sh 'cat deployment.yaml | sed "s/{{nameSpace}}/$nameSpace"/g'
+            sh 'cat deployment.yaml | sed "s/{{nameSpace}}/$nameSpace/g" | kubectl apply -f -'
             sh 'cat deployment.yaml | sed "s/{{BUILD_NUMBER}}/$BUILD_NUMBER/g" | kubectl apply -f -'
             sh 'kubectl apply -f service.yaml'
             sh 'cat deployment.yaml'
